@@ -1,0 +1,27 @@
+{
+  "name": "root-js-test-bucket",
+  "version": "0.0.1",
+  "description": "A utility to run JS based tests and save output for concurrent CI builds to split tests evenly.",
+  "bin": {
+    "root-js-test-bucket": "./bin/root-js-test-bucket.js"
+  },
+  "engines": {
+    "node": ">= 8.11.3"
+  },
+  "repository": "git@github.com:williams4027/root-js-test-bucket.git",
+  "scripts": {
+    "start": "yarn node ./bin/root-js-test-bucket.js",
+    "test": "jest --runInBand",
+    "test:debug": "node --inspect-brk node_modules/.bin/jest --runInBand",
+    "test:single": "jest --runInBand",
+    "lint": "eslint src"
+  },
+  "devDependencies": {
+    "eslint": "^5.9.0",
+    "eslint-plugin-root": "https://github.com/Root-App/root-eslint-plugin#0897f9aa9ad23714a4bcd60e5a56de77833dd9ac",
+    "jest": "^23.6.0"
+  },
+  "dependencies": {
+    "commander": "^2.19.0"
+  }
+}
