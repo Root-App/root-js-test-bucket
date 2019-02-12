@@ -5,12 +5,14 @@ const {
   parseRuntimeFile,
   writeRuntimeFile,
 } = require('../util/file-util');
+const TestBucketGenerator = require('./bucket-generator-command');
 
 class RuntimeCleanerCommand {
   constructor(program) {
     this.executionPath = program.executionDirectory || '.';
     this.outputFile = program.outputFile || this.executionPath + '/' + DEFAULT_TEST_RUNTIME_FILE;
     this.inputFiles = program.inputFiles || [this.executionPath + '/' + DEFAULT_TEST_RUNTIME_FILE];
+    this.testFileArray = new TestBucketGenerator(program).run();
     this.verbose = program.verbose || false;
   }
 

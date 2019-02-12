@@ -26,7 +26,7 @@ class BucketGeneratorCommand {
 
     this.executionPath = program.executionDirectory || '.';
     this.outputFile = program.outputFile || this.executionPath + '/' + DEFAULT_TEST_RUNTIME_FILE;
-
+    this.inputFiles = program.inputFiles || [this.executionPath + '/' + DEFAULT_TEST_RUNTIME_FILE];
     this.verbose = program.verbose || false;
   }
 
@@ -36,7 +36,11 @@ class BucketGeneratorCommand {
     }
 
     // Load all runtime jsons into memory
-    const testRuntimes = parseRuntimeFile(this.outputFile);
+    const testRuntimes = {};
+    this.inputFiles.forEach((inputFile) => {
+      const inputFileRuntimes = parseRuntimeFile(inputFile);
+      Object.assign(testRuntimes, inputFileRuntimes);
+    });
 
     // Calculate the average test runtime
     const averageRuntime = Object.keys(testRuntimes).reduce((runtimeTotal, runtimeDataKey) => {
