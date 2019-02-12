@@ -1,10 +1,9 @@
 /* eslint-disable no-console */
 const {
-  findTestFiles,
+  DEFAULT_TEST_RUNTIME_FILE,
   generateAbsoluteFilePath,
   parseRuntimeFile,
   writeRuntimeFile,
-  DEFAULT_TEST_RUNTIME_FILE,
 } = require('../util/file-util');
 
 class RuntimeCleanerCommand {
@@ -12,15 +11,6 @@ class RuntimeCleanerCommand {
     this.executionPath = program.executionDirectory || '.';
     this.outputFile = program.outputFile || this.executionPath + '/' + DEFAULT_TEST_RUNTIME_FILE;
     this.inputFiles = program.inputFiles || [this.executionPath + '/' + DEFAULT_TEST_RUNTIME_FILE];
-
-    this.testFileArray = [];
-    if (program.testFiles && program.testFiles.length > 1) {
-      this.testFileArray = program.testFiles;
-    } else {
-      this.testDirectoryBase = program.testFiles && program.testFiles.length === 1 ? program.testFiles : '.';
-      this.testFileArray = findTestFiles(this.testDirectoryBase);
-    }
-
     this.verbose = program.verbose || false;
   }
 

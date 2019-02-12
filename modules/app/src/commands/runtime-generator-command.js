@@ -2,27 +2,20 @@
 const { executeCommand } = require('../util/execute-command');
 const TestBucketGenerator = require('./bucket-generator-command');
 const {
+  DEFAULT_TEST_RUNTIME_FILE,
   generateRelativeFilePath,
   parseRuntimeFile,
   writeRuntimeFile,
-  DEFAULT_TEST_RUNTIME_FILE,
 } = require('../util/file-util');
 
 class RuntimeGeneratorCommand {
   constructor(program) {
     this.currentInstance = program.index || 0;
     this.bucketTotal = program.bucket || 1;
-
-    this.testFileArray = [];
-    if (program.testFiles && program.testFiles.length > 1) {
-      this.testFileArray = program.testFiles;
-    } else {
-      this.testFileArray = new TestBucketGenerator(program).run();
-    }
-
+    this.testFileArray = new TestBucketGenerator(program).run();
     this.executionPath = program.executionDirectory || '.';
     this.outputFile = program.outputFile || this.executionPath + '/' + DEFAULT_TEST_RUNTIME_FILE;
-    this.testCommand = program.testCommand && program.testCommand.trim() + ' ' || 'yarn mocha ';
+    this.testCommand = program.testCommand && program.testCommand.trim() + ' ';
 
     this.verbose = program.verbose || false;
   }
@@ -80,10 +73,6 @@ class RuntimeGeneratorCommand {
           cwd: this.executionPath,
         });
         const testOutput = testCommandOutput.toString();
-        if (this.verbose) {
-          console.log(testOutput);
-        }
-
         const testRuntime = this.parseTestRuntime(testOutput.toString());
         const testRuntimeKey = generateRelativeFilePath(this.executionPath, testFileName);
         return {

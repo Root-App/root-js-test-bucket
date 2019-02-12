@@ -14,7 +14,7 @@
     "test": "jest --runInBand",
     "test:debug": "node --inspect-brk node_modules/.bin/jest --runInBand",
     "test:single": "jest --runInBand",
-    "lint": "eslint src"
+    "lint": "eslint modules"
   },
   "devDependencies": {
     "eslint": "^5.9.0",

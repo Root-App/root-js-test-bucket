@@ -1,8 +1,8 @@
 /* eslint-disable no-console */
 const {
+  DEFAULT_TEST_RUNTIME_FILE,
   findTestFiles,
   parseRuntimeFile,
-  DEFAULT_TEST_RUNTIME_FILE,
 } = require('../util/file-util');
 const TestBucket = require('../models/test-bucket');
 
@@ -12,11 +12,16 @@ class BucketGeneratorCommand {
     this.bucketTotal = program.bucket || 1;
 
     this.testFileArray = [];
-    if (program.testFiles && program.testFiles.length > 1) {
+    if (!program.testFiles || program.testFiles.length === 0) {
+      this.testDirectoryBase = '.';
+      this.testFileArray = findTestFiles(this.testDirectoryBase);
+    } else if (program.testFiles.some((testFile) => testFile.indexOf('test.js') > -1)) {
       this.testFileArray = program.testFiles;
     } else {
-      this.testDirectoryBase = program.testFiles && program.testFiles.length === 1 ? program.testFiles : '.';
-      this.testFileArray = findTestFiles(this.testDirectoryBase);
+      this.testDirectoryBase = program.testFiles;
+      program.testFiles.forEach((currentTestDirectory) => {
+        Array.prototype.push.apply(this.testFileArray, findTestFiles(currentTestDirectory));
+      });
     }
 
     this.executionPath = program.executionDirectory || '.';
@@ -32,30 +37,27 @@ class BucketGeneratorCommand {
 
     // Load all runtime jsons into memory
     const testRuntimes = parseRuntimeFile(this.outputFile);
-    // if (this.verbose) {
-    //   console.log('\r\nTest Runtimes Merged: %s\r\n', JSON.stringify(testRuntimes, null, 2));
-    // }
 
     // Calculate the average test runtime
     const averageRuntime = Object.keys(testRuntimes).reduce((runtimeTotal, runtimeDataKey) => {
       return runtimeTotal += testRuntimes[runtimeDataKey];
     }, 0) / (Object.keys(testRuntimes).length || 1) || 1;
-    // if (this.verbose) {
-    //   console.log('Average Runtime Calculated: %s\r\n', averageRuntime);
-    // }
+    if (this.verbose) {
+      console.log('Average Runtime Calculated: %s\r\n', averageRuntime);
+    }
 
     // Add all files without a reported time
     this.testFileArray.forEach((currentFileName) => {
       if (!testRuntimes[currentFileName]) {
-        // if (this.verbose) {
-        //   console.log('Runtime Entry for %s not found. Adding average runtime.', currentFileName);
-        // }
+        if (this.verbose) {
+          console.log('Runtime Entry for %s not found. Adding average runtime.', currentFileName);
+        }
         testRuntimes[currentFileName] = averageRuntime;
       }
     });
-    // if (this.verbose) {
-    //   console.log('\r\nPrepared Runtimes: %s\r\n', JSON.stringify(testRuntimes, null, 2));
-    // }
+    if (this.verbose) {
+      console.log('\r\nPrepared Runtimes: %s\r\n', JSON.stringify(testRuntimes, null, 2));
+    }
 
     const sortBuckets = (a, b) => {
       return Number.parseFloat(a.totalTestRuntimes) - Number.parseFloat(b.totalTestRuntimes);
@@ -83,9 +85,9 @@ class BucketGeneratorCommand {
       const nextSmallestBucket = bucketArray.sort(sortBuckets)[0];
       nextSmallestBucket.addTest(runtimeData.testFileName, runtimeData.testRuntime);
     });
-    // if (this.verbose) {
-    //   console.log('Generated Bucket Array: %s\r\n', JSON.stringify(bucketArray, null, 2));
-    // }
+    if (this.verbose) {
+      console.log('Generated Bucket Array: %s\r\n', JSON.stringify(bucketArray, null, 2));
+    }
 
     // Return list of files in the current bucket
     const bucketData = bucketArray[this.currentInstance];
