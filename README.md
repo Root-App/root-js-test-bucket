@@ -9,11 +9,11 @@ Create a list of test files split in thier appropriate buckets. Multiple command
 ### -t, --test
 Run timed tests and collect results. Multiple commands can be ran concurrently by specifying bucket and indexes.
 
-__--testFiles [a]..[b]__\
-Required for --test, --clean: Base test directory location of the test files to include, or a list of the test files.
+__--testFiles <a>..<b>__\
+Required for --test, --clean: Base test directory location of the test files to include, or a list of comma separated test files/directories.
 
 __--testCommand <testCommand>__\
-Required for --test: JS test command that will be used when performing testing runtime reports. Default: "yarn mocha " Ex: "yarn mocha --require test/setup-tests.js test/global-tests.js"
+Required for --test: JS test command that will be used when performing testing runtime reports. Ex: "yarn mocha --require test/setup-tests.js test/global-tests.js"
 
 __--outputFile <outputFile>__\
 If ommitted, test runtimes will not be generated and tests will just be bucketed appropriately.
@@ -22,8 +22,8 @@ Output test runtime results to the following json file. Default: "./js-test-runt
 ### --clean
 Will remove entries from the runtime json for files that no longer exist.
 
-__--inputFiles [a]..[b]__\
-A list of the runtime json file locations. Default: "./js-test-runtime.json"
+__--inputFiles <a>..<b>__\
+A list of comma separated runtime json file locations. Default: "./js-test-runtime.json"
 
 ## Universal Flags:
 __-i, --index <index>__\
