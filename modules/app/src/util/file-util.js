@@ -28,7 +28,7 @@ function parseRuntimeFile(runtimeFile = DEFAULT_TEST_RUNTIME_FILE) {
 }
 
 function writeRuntimeFile(executionPath, outputFile = DEFAULT_TEST_RUNTIME_FILE, testRuntimeObject = {}) {
-  const jsonRuntimeFile = JSON.stringify(testRuntimeObject, null, 2);
+  const jsonRuntimeFile = _generateOrderedRuntimesFileString(testRuntimeObject);
   fs.writeFileSync(path.resolve(executionPath, outputFile), jsonRuntimeFile);
 }
 
@@ -38,6 +38,23 @@ function _generateFormattedFindFilePaths(findCommandOutputString) {
     .replace(/\.\//gi, '')
     .replace(/\/\//gi, '/')
     .split(/\r?\n/);
+}
+
+function _generateOrderedRuntimesFileString(testRuntimeObject) {
+  let fileString = '{\n';
+  const fileSpacer = '  ';
+
+  const sortedRuntimeKeys = Object.keys(testRuntimeObject).sort((a, b) => testRuntimeObject[b] - testRuntimeObject[a]);
+  sortedRuntimeKeys.forEach((runtimeKey, index) => {
+    fileString += `${fileSpacer}"${runtimeKey}": ${testRuntimeObject[runtimeKey]}`;
+    if (index !== sortedRuntimeKeys.length - 1) {
+      fileString += ',';
+    }
+    fileString += '\n';
+  });
+
+  fileString += '}\n';
+  return fileString;
 }
 
 module.exports = {
