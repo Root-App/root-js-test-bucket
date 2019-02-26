@@ -18,14 +18,19 @@ class BucketTestCommand {
       console.log('%s/%s - Running Tests:\r\n%s\r\n', this.currentInstance, this.bucketTotal, this.testFileArray);
     }
 
-    this.runTests();
+    return this.runTests();
   }
 
   runTests() {
-    executeCommand(this.testCommand + this.testFileArray.join(' '), {
-      cwd: this.executionPath,
-      stdio: 'inherit',
-    });
+    try {
+      executeCommand(this.testCommand + this.testFileArray.join(' '), {
+        cwd: this.executionPath,
+        stdio: 'inherit',
+      });
+      return 0;
+    } catch (error) {
+      return 1;
+    }
   }
 }
 
