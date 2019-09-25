@@ -3,9 +3,9 @@ const { executeCommand } = require('../util/execute-command');
 const TestBucketGenerator = require('./bucket-generator-command');
 
 class BucketTestCommand {
-  constructor(program) {
-    this.currentInstance = program.index || 0;
-    this.bucketTotal = program.bucket || 1;
+  constructor(program, bucketTotal, bucketIndex) {
+    this.currentInstance = bucketIndex || 0;
+    this.bucketTotal = bucketTotal || 1;
     this.testFileArray = new TestBucketGenerator(program).run();
     this.executionPath = program.executionDirectory || '.';
     this.testCommand = program.testCommand && program.testCommand.trim() + ' ';
