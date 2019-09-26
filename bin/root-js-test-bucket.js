@@ -44,7 +44,8 @@ if (program.generate) {
   if (program.outputFile) {
     process.exit(new RuntimeGeneratorCommand(program).run());
   } else {
-    process.exit(new BucketTestCommand(program, process.env.BUILDKITE_PARALLEL_JOB_COUNT, process.env.BUILDKITE_PARALLEL_JOB).run());
+    // process.exit(new BucketTestCommand(program, process.env.BUILDKITE_PARALLEL_JOB_COUNT, process.env.BUILDKITE_PARALLEL_JOB).run());
+    process.exit(new BucketTestCommand(program).run());
   }
 } else if (program.clean) {
   process.exit(new RuntimeCleanerCommand(program).run());
