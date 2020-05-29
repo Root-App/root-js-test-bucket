@@ -66,7 +66,6 @@ class RuntimeGeneratorCommand {
   }
 
   jestParseTestRuntime(runtimeRegEx, testOutput) {
-    console.log(testOutput);
     const runtimeMatch = testOutput.match(runtimeRegEx);
     let runtimeValue = Number.parseFloat(runtimeMatch[1]);
     if (runtimeMatch[2] === 's') {
@@ -78,10 +77,6 @@ class RuntimeGeneratorCommand {
   }
 
   parseTestRuntime(testOutput) {
-    console.log('parseTestRuntime');
-    console.log(testOutput);
-    console.log('parseTestRuntime');
-
     const mochaRuntimeRegEx = new RegExp(/^.* passing \((\d*)(ms|m|s)\)/, 'm');
     const jestRuntimeRegEx = new RegExp(/^.*Time:.*?(\d*\.?\d*?)(ms|m|s)/, 'm');
 
