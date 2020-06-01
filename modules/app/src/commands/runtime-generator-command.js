@@ -54,8 +54,7 @@ class RuntimeGeneratorCommand {
     }
   }
 
-  parseTestRuntime(testOutput) {
-    const runtimeRegEx = new RegExp(/^.* passing \((\d*)(ms|m|s)\)/, 'm');
+  parseTestOutput(runtimeRegEx, testOutput) {
     const runtimeMatch = testOutput.match(runtimeRegEx);
     let runtimeValue = Number.parseFloat(runtimeMatch[1]);
     if (runtimeMatch[2] === 's') {
@@ -64,6 +63,19 @@ class RuntimeGeneratorCommand {
       runtimeValue *= 60 * 1000;
     }
     return runtimeValue;
+  }
+
+  parseTestRuntime(testOutput) {
+    const mochaRuntimeRegEx = new RegExp(/^.* passing \((\d*)(ms|m|s)\)/, 'm');
+    const jestRuntimeRegEx = new RegExp(/^.*Time:.*?(\d*\.?\d*?)(ms|m|s)/, 'm');
+
+    if (jestRuntimeRegEx.test(testOutput)) {
+      return this.parseTestOutput(jestRuntimeRegEx, testOutput);
+    }
+
+    if (mochaRuntimeRegEx.test(testOutput)) {
+      return this.parseTestOutput(mochaRuntimeRegEx, testOutput);
+    }
   }
 
   runTest(testFileName) {
