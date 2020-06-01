@@ -54,18 +54,7 @@ class RuntimeGeneratorCommand {
     }
   }
 
-  mochaParseTestRuntime(runtimeRegEx, testOutput) {
-    const runtimeMatch = testOutput.match(runtimeRegEx);
-    let runtimeValue = Number.parseFloat(runtimeMatch[1]);
-    if (runtimeMatch[2] === 's') {
-      runtimeValue *= 1000;
-    } else if (runtimeMatch[2] === 'm') {
-      runtimeValue *= 60 * 1000;
-    }
-    return runtimeValue;
-  }
-
-  jestParseTestRuntime(runtimeRegEx, testOutput) {
+  parseTestOutput(runtimeRegEx, testOutput) {
     const runtimeMatch = testOutput.match(runtimeRegEx);
     let runtimeValue = Number.parseFloat(runtimeMatch[1]);
     if (runtimeMatch[2] === 's') {
@@ -81,11 +70,11 @@ class RuntimeGeneratorCommand {
     const jestRuntimeRegEx = new RegExp(/^.*Time:.*?(\d*\.?\d*?)(ms|m|s)/, 'm');
 
     if (jestRuntimeRegEx.test(testOutput)) {
-      return this.jestParseTestRuntime(jestRuntimeRegEx, testOutput);
+      return this.parseTestOutput(jestRuntimeRegEx, testOutput);
     }
 
     if (mochaRuntimeRegEx.test(testOutput)) {
-      return this.mochaParseTestRuntime(mochaRuntimeRegEx, testOutput);
+      return this.parseTestOutput(mochaRuntimeRegEx, testOutput);
     }
   }
 
