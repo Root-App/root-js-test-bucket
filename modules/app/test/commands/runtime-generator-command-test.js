@@ -12,9 +12,9 @@ describe('RuntimeGeneratorCommand', () => {
 
     it('works for jest output', () => {
       const command = new RuntimeGeneratorCommand(program);
-      expect(command.parseTestRuntime('Time:        8ms')).toEqual(8);
-      expect(command.parseTestRuntime('Time:        8.476s')).toEqual(8476);
-      expect(command.parseTestRuntime('Time:        5.612m')).toEqual(336720);
+      expect(command.parseTestRuntime('Total Test Run Time: 8ms')).toEqual(8);
+      expect(command.parseTestRuntime('Total Test Run Time: 8.476s')).toEqual(8476);
+      expect(command.parseTestRuntime('Total Test Run Time: 5.612m')).toEqual(336720);
     });
   });
 });
