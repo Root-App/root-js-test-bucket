@@ -27,6 +27,13 @@ class RuntimeGeneratorCommand {
 
     const testRuntimes = {};
     const testFailureArray = [];
+
+    /**
+     * Jest needs to generate a cache that can take 2 minutes to build on the first test run.
+     * We run the first test to force the cache to generate so that we get more accurate test times.
+     */
+    this.runTest(this.testFileArray[0]);
+
     this.testFileArray.forEach((currentTestFile, index, array) => {
       console.log('%s/%s: Starting Test: %s\r\n', index + 1, array.length, currentTestFile);
       const testData = this.runTest(currentTestFile);
