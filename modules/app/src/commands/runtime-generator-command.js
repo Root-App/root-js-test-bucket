@@ -8,6 +8,8 @@ const {
   writeRuntimeFile,
 } = require('../util/file-util');
 
+const STARTUP_PADDING_MS = 2000;
+
 class RuntimeGeneratorCommand {
   constructor(program) {
     this.currentInstance = program.index || 0;
@@ -62,7 +64,7 @@ class RuntimeGeneratorCommand {
     } else if (runtimeMatch[2] === 'm') {
       runtimeValue *= 60 * 1000;
     }
-    return runtimeValue;
+    return runtimeValue + STARTUP_PADDING_MS;
   }
 
   parseTestRuntime(testOutput) {
