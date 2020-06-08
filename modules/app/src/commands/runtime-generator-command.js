@@ -64,7 +64,7 @@ class RuntimeGeneratorCommand {
     } else if (runtimeMatch[2] === 'm') {
       runtimeValue *= 60 * 1000;
     }
-    return runtimeValue + STARTUP_PADDING_MS;
+    return runtimeValue;
   }
 
   parseTestRuntime(testOutput) {
@@ -72,7 +72,7 @@ class RuntimeGeneratorCommand {
     const jestRuntimeRegEx = new RegExp(/^.*Total Test Run Time:.*?(\d*\.?\d*?)(ms|m|s)/, 'm');
 
     if (jestRuntimeRegEx.test(testOutput)) {
-      return this.parseTestOutput(jestRuntimeRegEx, testOutput);
+      return this.parseTestOutput(jestRuntimeRegEx, testOutput) + STARTUP_PADDING_MS;
     }
 
     if (mochaRuntimeRegEx.test(testOutput)) {
