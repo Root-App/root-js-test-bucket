@@ -10,11 +10,11 @@ describe('RuntimeGeneratorCommand', () => {
       expect(command.parseTestRuntime('1 passing (1m)')).toEqual(60000);
     });
 
-    it('works for jest output', () => {
+    it('works for jest output with padded runtimes', () => {
       const command = new RuntimeGeneratorCommand(program);
-      expect(command.parseTestRuntime('Time:        8ms')).toEqual(8);
-      expect(command.parseTestRuntime('Time:        8.476s')).toEqual(8476);
-      expect(command.parseTestRuntime('Time:        5.612m')).toEqual(336720);
+      expect(command.parseTestRuntime('Total Test Run Time: 8ms')).toEqual(2008);
+      expect(command.parseTestRuntime('Total Test Run Time: 8.476s')).toEqual(10476);
+      expect(command.parseTestRuntime('Total Test Run Time: 5.612m')).toEqual(338720);
     });
   });
 });

@@ -8,6 +8,8 @@ const {
   writeRuntimeFile,
 } = require('../util/file-util');
 
+const STARTUP_PADDING_MS = 2000;
+
 class RuntimeGeneratorCommand {
   constructor(program) {
     this.currentInstance = program.index || 0;
@@ -67,10 +69,10 @@ class RuntimeGeneratorCommand {
 
   parseTestRuntime(testOutput) {
     const mochaRuntimeRegEx = new RegExp(/^.* passing \((\d*)(ms|m|s)\)/, 'm');
-    const jestRuntimeRegEx = new RegExp(/^.*Time:.*?(\d*\.?\d*?)(ms|m|s)/, 'm');
+    const jestRuntimeRegEx = new RegExp(/^.*Total Test Run Time:.*?(\d*\.?\d*?)(ms|m|s)/, 'm');
 
     if (jestRuntimeRegEx.test(testOutput)) {
-      return this.parseTestOutput(jestRuntimeRegEx, testOutput);
+      return this.parseTestOutput(jestRuntimeRegEx, testOutput) + STARTUP_PADDING_MS;
     }
 
     if (mochaRuntimeRegEx.test(testOutput)) {
