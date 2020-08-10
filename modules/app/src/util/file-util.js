@@ -46,7 +46,7 @@ function _generateOrderedRuntimesFileString(testRuntimeObject) {
 
   const sortedRuntimeKeys = Object.keys(testRuntimeObject).sort((a, b) => testRuntimeObject[b] - testRuntimeObject[a]);
   sortedRuntimeKeys.forEach((runtimeKey, index) => {
-    fileString += `${fileSpacer}"${runtimeKey}": ${testRuntimeObject[runtimeKey]}`;
+    fileString += `${fileSpacer}"${runtimeKey}": ${testRuntimeObject[runtimeKey] / 1000} `;
     if (index !== sortedRuntimeKeys.length - 1) {
       fileString += ',';
     }
