@@ -15,7 +15,7 @@ class BucketGeneratorCommand {
     if (!program.testFiles || program.testFiles.length === 0) {
       this.testDirectoryBase = '.';
       this.testFileArray = findTestFiles(this.testDirectoryBase);
-    } else if (program.testFiles.some((testFile) => testFile.indexOf('test.js') > -1)) {
+    } else if (program.testFiles.some((testFile) => testFile.indexOf('-test.js') > -1)) {
       this.testFileArray = program.testFiles;
     } else {
       this.testDirectoryBase = program.testFiles;
