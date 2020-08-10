@@ -1,4 +1,4 @@
-const { executeCommand } = require('../util/execute-command');
+const {executeCommand} = require('../util/execute-command');
 const fs = require('fs');
 const path = require('path');
 
@@ -6,7 +6,7 @@ const DEFAULT_TEST_RUNTIME_FILE_PREFIX = 'js-test-runtime';
 const DEFAULT_TEST_RUNTIME_FILE = DEFAULT_TEST_RUNTIME_FILE_PREFIX + '.json';
 
 function findTestFiles(testDirectory = '.') {
-  const findCommandOutput = executeCommand('find ' + testDirectory + ' -path ./node_modules -prune -o -type f -name "*test.js"');
+  const findCommandOutput = executeCommand('find ' + testDirectory + ' -path ./node_modules -prune -o -type f -name "*-test.js"');
   const testFileArray = _generateFormattedFindFilePaths(findCommandOutput.toString());
   return testFileArray.filter((file) => !!file);
 }
